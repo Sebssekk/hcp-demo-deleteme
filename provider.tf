@@ -13,7 +13,7 @@ terraform {
 
 provider "google" {
   # Configuration options
-  project = "qwiklabs-gcp-03-a55e0a83ba99"
+  project = var.project_id
 }
 provider "tls" {
   # Configuration options

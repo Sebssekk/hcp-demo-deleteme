@@ -20,3 +20,13 @@ variable "vm_username" {
   type = string
   default = "debian"
 }
+
+variable "project_id" {
+  type = string
+  description = "GCP Project id"
+}
+
+variable "vm_size" {
+  type = string
+  default = "e2-micro"
+}

@@ -18,7 +18,7 @@ resource "tls_private_key" "ssh_key_pair" {
 
 resource "google_compute_instance" "vm" {
   name         = "${var.prefix_name}-vm"
-  machine_type = "e2-micro"
+  machine_type = var.vm_size
   zone         = "${var.gcp_region}-a"
 
   boot_disk {
