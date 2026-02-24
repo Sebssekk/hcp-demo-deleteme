@@ -20,8 +20,3 @@ variable "vm_username" {
   type = string
   default = "debian"
 }
-
-variable "ssh_key_filename" {
-  type = string
-  default = "ssh-key"
-}

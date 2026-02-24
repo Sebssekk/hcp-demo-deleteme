@@ -10,8 +10,8 @@ data "google_compute_image" "debian_image" {
 }
 
 
-locals {
-  public_key_material = file("${var.ssh_key_filename}.pub")
+resource "tls_private_key" "ssh_key_pair" {
+  algorithm = "ED25519"
 }
 
 
@@ -37,7 +37,7 @@ resource "google_compute_instance" "vm" {
 
   metadata = {
     enable-oslogin = "false"
-    ssh-keys = "${var.vm_username}:${local.public_key_material}"
+    ssh-keys = "${var.vm_username}:${tls_private_key.ssh_key_pair.public_key_openssh}"
   }
 
   metadata_startup_script = "echo hi > /test.txt"
