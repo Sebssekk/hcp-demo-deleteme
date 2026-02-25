@@ -30,3 +30,9 @@ variable "vm_size" {
   type = string
   default = "e2-micro"
 }
+
+variable "second_instance_num" {
+  type = number
+  description = "Number of 'vm2' to create"
+  default = 1
+}

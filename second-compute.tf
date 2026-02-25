@@ -13,9 +13,10 @@ resource "tls_private_key" "ssh_key_pair2" {
 resource "google_compute_instance" "vm2" {
   ### META ARGUMENTS ###
   depends_on = [ google_compute_instance.vm ]
+  count = var.second_instance_num
   ######################
 
-  name         = "${var.prefix_name}-vm2"
+  name         = "${var.prefix_name}-vm2-${count.index}"
   machine_type = var.vm_size
   zone         = "${var.gcp_region}-a"
 
@@ -45,4 +46,8 @@ resource "google_compute_instance" "vm2" {
     email  = google_service_account.vm_sa2.email
     scopes = ["cloud-platform"]
   }
+}
+
+output "public_ip_vm2" {
+  value = google_compute_instance.vm2[*].network_interface[0].access_config[0].nat_ip
 }
