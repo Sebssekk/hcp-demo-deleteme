@@ -1,6 +1,24 @@
+locals {
+  block_disks = {
+    disk1 = {
+      size_GB = 20,
+      type = "pd-ssd"
+    }
+    disk2 = {
+      size_GB = 10,
+      type = "pd-ssd"
+    }
+    disk3 = {
+      size_GB = 5,
+      type = "pd-ssd"
+    }
+  }
+}
+
+
 resource "google_compute_disk" "disk" {
   ### META ARGUMENTS ###
-  for_each = var.block_disks
+  for_each = local.block_disks
   ######################
 
   name  = "${each.key}"

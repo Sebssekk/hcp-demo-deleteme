@@ -26,10 +26,10 @@ resource "google_compute_instance" "vm" {
   lifecycle {
     #prevent_destroy = true
     #ignore_changes = [ labels ]
-    precondition {
-      condition = data.google_storage_bucket_object.vm_conf.content_type == "text/plain"
-      error_message = "WRONG CONTENT TYPE"
-    }
+    # precondition {
+    #   condition = data.google_storage_bucket_object.vm_conf.content_type == "text/plain"
+    #   error_message = "WRONG CONTENT TYPE"
+    # }
   }
   ######################
   name         = "${var.prefix_name}-vm"
@@ -41,6 +41,17 @@ resource "google_compute_instance" "vm" {
   boot_disk {
     initialize_params {
       image = data.google_compute_image.debian_image.self_link
+    }
+  }
+
+  # attached_disk {
+  #   source = google_compute_disk.disk["disk1"].self_link
+  # }
+  dynamic "attached_disk" {
+    for_each = local.block_disks
+    iterator = disk
+    content {
+      source = google_compute_disk.disk[disk.key].self_link
     }
   }
 
