@@ -33,6 +33,5 @@ variable "vm_size" {
 
 variable "second_instance_num" {
   type = number
-  description = "Number of 'vm2' to create"
-  default = 1
+  description = "Number of 'vm2' to create. If set to 0 Will not create it"
 }
