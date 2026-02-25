@@ -8,6 +8,10 @@ terraform {
       source = "hashicorp/google"
       version = "7.20.0"
     }
+    random = {
+      source = "hashicorp/random"
+      version = "3.8.1"
+    }
   }
 }
 
@@ -16,5 +20,8 @@ provider "google" {
   project = var.project_id
 }
 provider "tls" {
+  # Configuration options
+}
+provider "random" {
   # Configuration options
 }
