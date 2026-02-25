@@ -17,10 +17,18 @@ resource "tls_private_key" "ssh_key_pair" {
 
 
 resource "google_compute_instance" "vm" {
+  ### META ARGUMENTS ###
+  lifecycle {
+    #prevent_destroy = true
+    #ignore_changes = [ labels ]
+  }
+  ######################
   name         = "${var.prefix_name}-vm"
   machine_type = var.vm_size
   zone         = "${var.gcp_region}-a"
-
+  labels = {
+    test = "aaa"
+  }
   boot_disk {
     initialize_params {
       image = data.google_compute_image.debian_image.self_link
