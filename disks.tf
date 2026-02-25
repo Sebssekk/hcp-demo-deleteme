@@ -6,5 +6,5 @@ resource "google_compute_disk" "disk" {
   name  = "${each.key}"
   type  = each.value.type
   zone  = "${var.gcp_region}-a"
-  physical_block_size_bytes = each.value.size_GB * 1024*1024
+  size = each.value.size_GB 
 }

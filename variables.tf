@@ -25,6 +25,10 @@ variable "project_id" {
   type = string
   description = "GCP Project id"
 }
+variable "project_id2" {
+  type = string
+  description = "GCP Project id"
+}
 
 variable "vm_size" {
   type = string

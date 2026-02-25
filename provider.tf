@@ -14,11 +14,16 @@ terraform {
     }
   }
 }
-
 provider "google" {
   # Configuration options
   project = var.project_id
 }
+
+provider "google"{
+  project = var.project_id2
+  alias = "G2"
+}
+
 provider "tls" {
   # Configuration options
 }
