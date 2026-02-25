@@ -15,12 +15,21 @@ resource "tls_private_key" "ssh_key_pair" {
 }
 
 
+data "google_storage_bucket_object" "vm_conf" {
+  name   = "vm.conf"
+  bucket = "vm-conf-12345678"
+}
+
 
 resource "google_compute_instance" "vm" {
   ### META ARGUMENTS ###
   lifecycle {
     #prevent_destroy = true
     #ignore_changes = [ labels ]
+    precondition {
+      condition = data.google_storage_bucket_object.vm_conf.content_type == "text/plain"
+      error_message = "WRONG CONTENT TYPE"
+    }
   }
   ######################
   name         = "${var.prefix_name}-vm"
