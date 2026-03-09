@@ -8,6 +8,11 @@ variable "subnet_cidr" {
   type = string
   description = "CIDR for subnet"
   default = "192.168.0.0/24"
+
+  validation {
+    condition = can(cidrnetmask(var.subnet_cidr))
+    error_message = "IS NOT A CIDR"
+  }
 }
 
 variable "gcp_region" {
@@ -74,3 +79,30 @@ variable "extra_disks_type" {
 #     }
 #   }
 # }
+
+variable "demo_gcp_regions" {
+  type = list(string)
+  default = [ "us-central1", "us-west1" ]
+}
+
+variable "demo_gcp_per_region_zones" {
+  type = list(string)
+  default = [ "a", "b" ]
+
+  validation {
+    condition = setunion(["a","b","c"], toset(var.demo_gcp_per_region_zones)) == ["a","b","c"]    
+    error_message = "value"
+  }
+}
+
+locals {
+  demo_output = flatten([ for idr,r in var.demo_gcp_regions : [ for idz,z in var.demo_gcp_per_region_zones : "vm-XX-${r}-${z}"]])
+}
+
+output "name" {
+  # vm-0-us-central1-a
+  # vm-1-us-central1-b
+  # vm-2-us-west1-a
+  # vm-3-us-west1-b
+  value = local.demo_output
+}
