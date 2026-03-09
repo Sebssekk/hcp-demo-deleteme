@@ -15,10 +15,10 @@ resource "tls_private_key" "ssh_key_pair" {
 }
 
 
-data "google_storage_bucket_object" "vm_conf" {
-  name   = "vm.conf"
-  bucket = "vm-conf-12345678"
-}
+# data "google_storage_bucket_object" "vm_conf" {
+#   name   = "vm.conf"
+#   bucket = "vm-conf-12345678"
+# }
 
 
 resource "google_compute_instance" "vm" {
