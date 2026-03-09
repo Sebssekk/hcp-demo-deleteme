@@ -46,6 +46,16 @@ variable "bucket_prefix" {
   default = [ "log", "data","conf"]
 }
 
+variable "extra_disks" {
+  description = "list of disk size to attach to vm"
+  default = [ 20, 10 , 5]
+  type = list(number)
+}
+variable "extra_disks_type" {
+  description = "type of extra disks"
+  default = "pd-ssd"
+  type = string
+}
 # variable "block_disks" {
 #   type = map
 #   description = "A map of disks to create 'disk_name' = 'disk_size_in_GB' "

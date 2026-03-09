@@ -8,7 +8,7 @@ resource "random_string" "bucket_suffix" {
 resource "google_storage_bucket" "bucket" {
   ### META ARGUMENTS ###
   for_each = var.bucket_prefix
-  provider = google.G2
+  #provider = google.G2
   lifecycle {
     ignore_changes = [ storage_class ]
   }
