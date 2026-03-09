@@ -90,7 +90,7 @@ variable "demo_gcp_per_region_zones" {
   default = [ "a", "b" ]
 
   validation {
-    condition = setunion(["a","b","c"], toset(var.demo_gcp_per_region_zones)) == ["a","b","c"]    
+    condition = setunion(["a","b","c"], toset(var.demo_gcp_per_region_zones)) == toset(["a","b","c"])    
     error_message = "value"
   }
 }
