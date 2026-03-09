@@ -11,7 +11,7 @@ resource "tls_private_key" "ssh_key_pair2" {
 
 resource "google_compute_instance" "vm2" {
   ### META ARGUMENTS ###
-  depends_on = [ google_compute_instance.vm ]
+  #depends_on = [ google_compute_instance.vm ]
   count = var.second_instance_num
   ######################
 
@@ -28,9 +28,9 @@ resource "google_compute_instance" "vm2" {
   network_interface {
     subnetwork = google_compute_subnetwork.subnet.id
 
-    access_config {
-      // Ephemeral public IP
-    }
+    //access_config {
+    //  // Ephemeral public IP
+    //}
   }
 
   metadata = {
@@ -38,7 +38,16 @@ resource "google_compute_instance" "vm2" {
     ssh-keys = "${var.vm_username}:${tls_private_key.ssh_key_pair2[0].public_key_openssh}"
   }
 
-  metadata_startup_script = "echo hi > /test.txt"
+  metadata_startup_script = <<-EOT
+      sudo apt-get update
+      sudo apt-get install -y nginx
+      sudo systemctl start nginx
+      sudo systemctl enable nginx
+      cat <<EOF | sudo tee /var/www/html/index.html
+      ${local.html_content}
+      EOF
+      sudo chown www-data:www-data /var/www/html/index.htm
+      EOT
 
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
@@ -47,6 +56,10 @@ resource "google_compute_instance" "vm2" {
   }
 }
 
-output "public_ip_vm2" {
-  value = google_compute_instance.vm2[*].network_interface[0].access_config[0].nat_ip
+locals {
+  html_content = file("${path.module}/index.html")
+}
+
+output "private_ip_vm2" {
+  value = google_compute_instance.vm2[*].network_interface[0].network_ip
 }

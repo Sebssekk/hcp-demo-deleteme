@@ -67,8 +67,20 @@ resource "google_compute_instance" "vm" {
     enable-oslogin = "false"
     ssh-keys = "${var.vm_username}:${tls_private_key.ssh_key_pair.public_key_openssh}"
   }
-
-  metadata_startup_script = "echo hi > /test.txt"
+   
+  metadata_startup_script = <<-EOT
+    #!/bin/bash
+    sudo apt-get update
+    sudo apt-get install -y nginx
+    sudo systemctl start nginx
+    sudo systemctl enable nginx 
+    cat <<EOF > /etc/nginx/conf.d/upstream.conf
+    upstream backends {
+    %{ for ip in google_compute_instance.vm2[*].network_interface[0].network_ip }
+      server ${ip}:80
+    %{endfor}
+    }
+    EOT
 
   service_account {
     # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
